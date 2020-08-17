@@ -1,9 +1,12 @@
 import accmodels
 
-lhc=accmodels.LHC.from_path("/home/rdemaria/local/hllhc15")
-lhc=accmodels.LHC.hllhc15.from_github()
+import logging
+logging.basicConfig(level=logging.INFO)
 
-mm=lhc.round15.collision.load()
+
+lhc=accmodels.lhc.get_model(source="scenarios/round/collision15.madx",
+                           repository="/afs/cern.ch/eng/lhc/optics/HLLHCV1.5",
+                           prefix="slhc")
 
 
 

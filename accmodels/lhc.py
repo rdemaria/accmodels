@@ -1,14 +1,13 @@
-from .accelerator import Accelerator, Repository, Collection
-
+from .model import Machine, Model
 
 class LHCModel(Model):
     """ additional code specific for LHC models
     """
 
-LHC=Accelerator("LHC",LHCModel)
+lhc=Machine("lhc",LHCModel)
 
-LHC.add(Repository(
-    "hllhc15",
-    github="lhcopt/hllhc15.git")
+lhc.hllhc15=GitRepo("https://github.com/lhcopt/hllhc15.git", "master")
+
+
 
 
