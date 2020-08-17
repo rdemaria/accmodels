@@ -1,0 +1,41 @@
+General Concepts:
+
+- Sequence
+- Beam
+- Selection
+- Init0: inside selection, optional
+    - position
+    - beta functions
+- Matching
+    - variables
+    - contraints
+    - active
+    - command
+    - optimizer
+    - filters (set of variable or constraints: exclude - include)
+    - parameters
+
+- Plot
+- Knob
+- Twiss: table
+- Survey: table
+- Orbit: table
+-  locations
+-  turns
+
+
+- Accelerator
+- Model (sequence/optics)
+- Collection (list of models with names)
+- Transition (list of model with parameters)
+- Scripts
+
+LHC.matching.ir1.match.run()
+
+mm=LHC.matching.ir1.clone()
+
+mm['kq4'].restrict
+
+
+mm.match()
+
