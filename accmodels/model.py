@@ -1,10 +1,4 @@
 """
-A Machine:
-- allows to locate a set of repositories using SourceSets or loading from a path
-- defines a specialized model generator
-
-A repositories contains a set of Models or Collections of Models using metadata and data contained in the repository.
-
 A Model consists on set components that allow to compute optics functions. A specialized model contains additional highlevel methods for the machine.
 
 The components of a model are:
@@ -43,45 +37,10 @@ from pathlib import Path
 import tempfile
 import shutil
 import os
-import site
-
-import logging
-
-logger=logging.getLogger("accmodel")
 
 
 
-class Machine:
-    def __init__(self,name,model):
-        self.name=name
-        self.model=model
-
-    def get_model(self,source,repository,prefix):
-        return self.model(source,repository,prefix)
-
-
-class GitRepo:
-    def __init__(self,name,url,branch=None,tag=None):
-        self.url=url
-        self.branch=branch
-        self.tag=tag
-        self.checkout()
-        self.base=Path(site.getuserbase())/'share'/'accmodels'
-        self.base.mkdir(parents=True, exist_ok=True)
-        self.dirname=self.base/self.name
-
-    def checkout(self):
-        if self.dirname.is_dir():
-            if self.tag is None:
-                os.system(f"cd {self.dirname}; git pull")
-        else:
-            if self.tag is None:
-               os.system(f"cd {self.base}; git clone -b {self.tag} {self.url} {self.name}")
-            else:
-               os.system(f"cd {self.base}; git clone -b {self.branch} {self.url} {self.name}")
-
-    def populate(self):
-        pass
+from .logger import logger
 
 
 class Model:
@@ -115,6 +74,23 @@ class Model:
     def mad_log(self):
         self._stdout.seek(0)
         print(self._stdout.read())
+
+
+
+class Selection:
+    def __init__(self,sequence,start=None,end=None,periodic=True):
+        self.sequence=sequence
+        self.start=start
+        self.end=end
+        self.periodic=periodic
+        self.mad=None
+
+class Point:
+    def __init__(self,sequence,element):
+        self.sequence=sequence
+        self.element=element
+
+
 
 
 
