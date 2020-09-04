@@ -38,7 +38,7 @@ import tempfile
 import shutil
 import os
 
-
+from pyoptics import optics
 
 from .logger import logger
 
@@ -57,10 +57,10 @@ class Model:
         self.reload()
 
     def __del__(self):
-        logger.info(f"removing {self.dtemp}")
+        logger.info(f"removing {self._tempdir}")
         self.mad.exit()
         self._stdout.close()
-        shutil.rmtree(self.dtemp)
+        shutil.rmtree(self._tempdir)
 
     def reload(self):
         from cpymad.madx import Madx
@@ -76,19 +76,35 @@ class Model:
         print(self._stdout.read())
 
 
+twiss_cols=[
+"betx", "alfx", "mux",
+"bety", "alfy", "muy",
+"x", "px", "y", "py", "t", "pt",
+"dx", "dpx", "dy", "dpy",
+"wx", "phix", "dmux", "wy", "phiy", "dmuy",
+"ddx", "ddpx", "ddy", "ddpy",
+"r11", "r12", "r21", "r22",
+"energy"]
+
+
 
 class Selection:
-    def __init__(self,sequence,start=None,end=None,periodic=True):
+    def __init__(self,sequence,twiss,start=None,end=None,):
         self.sequence=sequence
         self.start=start
         self.end=end
-        self.periodic=periodic
         self.mad=None
+
+    def twiss(self):
+        if self.start is None:
+            return self.mad.twiss()
+
 
 class Point:
     def __init__(self,sequence,element):
         self.sequence=sequence
         self.element=element
+        self.twiss_data={}
 
 
 

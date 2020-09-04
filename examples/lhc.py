@@ -10,3 +10,4 @@ lhc=accmodels.lhc.get_model(source="scenarios/round/collision15.madx",
 lhc=accmodels.lhc.hllhc15.round.collision15()
 
 
+lhc.lhcb1.show("")

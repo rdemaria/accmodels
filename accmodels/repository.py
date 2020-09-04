@@ -51,6 +51,7 @@ class GitRepo:
         self.base.mkdir(parents=True, exist_ok=True)
         self.clonepath=self.base/self.name
         self.checkout()
+        self.populate()
 
     def checkout(self):
         if self.clonepath.is_dir():
@@ -70,19 +71,24 @@ class GitRepo:
         ### implement metadata alternative to self discovery
         scenarios=self.clonepath/'scenarios'
         for pp in scenarios.iterdir():
-            setattr(pp.stem,Collection(name=pp.stem,
+            setattr(self,pp.stem,Collection(name=pp.stem,
                                        path=pp,
                                        repository=self.clonepath,
-                                       prefix=self.prefix))
+                                       prefix=self.prefix,
+                                       model=self.model))
 
 class Collection:
     def __init__(self,name,path,repository,prefix,model=None,models=None):
         self.name=name
         self.path=path
         self.repository=repository
+        self.prefix=prefix
+        self.model=model
         if models is None:
-            self.models=[pp.stem for pp in path.iterdir]
-            setattr(pp.stem,ModelLoader(pp,self.repository,self.prefix,self.model))
+            self.models=[]
+            for pp in path.iterdir():
+                self.models.append(pp.stem)
+                setattr(self,pp.stem,ModelLoader(pp,self.repository,self.prefix,self.model))
 
 class ModelLoader:
     def __init__(self,source,repository,prefix,model):
@@ -92,5 +98,5 @@ class ModelLoader:
         self.model=model
 
     def __call__(self):
-        return model(self.source,self.repository,self.prefix)
+        return self.model(self.source,self.repository,self.prefix)
 
